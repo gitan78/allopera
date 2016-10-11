@@ -1,0 +1,27 @@
+{% load demo_tags wagtailcore_tags wagtailimages_tags %}
+{% with self.speakers.all as speakers %}
+{% if speakers %}
+
+    <div id="masonry-grid" class="row">
+        {% for speaker in speakers %}
+        <div class="col s6 m4 l3 item grid-item" style="padding:2px;">
+            <div class="card-panel">
+                <div class="row valign-left">
+                    <div class="col s6 m5 l3">
+                        {% if speaker.image %}
+                        <a class="waves-effect waves-block waves-light" href="{{ speaker.link }}">
+                        {% image speaker.image fill-250x250 class="circle responsive-img center" %}</a>
+                        {% endif %}
+                    </div>
+                        <div class="col s6 m7 l9">
+                            {# Speaker name_display fields concatenates first_name and last_name fields #}
+                            <span class="blue-grey-text text-blue-grey left">{{ speaker.name_display }}</span>
+                        </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+{% endif %}
+{% endwith %}

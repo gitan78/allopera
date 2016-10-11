@@ -1,0 +1,36 @@
+{% extends "demo/base.html" %}
+{% load wagtailcore_tags static %}
+{% load wagtailimages_tags %}
+{% load demo_tags %}
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+
+{% include "demo/includes/parallasse_home.html" %}
+
+
+<div id="section1">
+    <div class="row">
+        {% include "demo/includes/galleria_immagini_home.html" %}
+
+        {% if self.campi_dinamici %}
+        <div class="container ">
+            <div class="container body-content">
+                {% include "demo/includes/streamfield.html" with content=self.campi_dinamici %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                {% blog_listing_homepage %}
+            </div>
+            <div class="col s12 m12 l12">
+                {% event_listing_homepage %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "demo/base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load demo_tags %}
+
+{% block content %}
+
+<div class="row">
+    <div id="masonry-grid" class="container">
+        <div class="col s12 m12 l6 item">
+            <div class="card">
+                <div class="card-image waves-effect waves-block waves-light">
+                    {% if self.image %}
+                    {% image self.image height-350 class="activator responsive-img" %}
+                    {% endif %}
+                </div>
+
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col s6 m9 l9">
+                            {% if self.first_name or self.last_name %}
+                            <h4 class="card-title activator blue-grey-text text-blue-grey lighten-1">{{ self.first_name }} {{ self.last_name }}</h4>
+                            {% endif %}
+                        </div>
+
+                        <div class="col s6 m3 l3 right">
+                            {% if self.avatar %}
+                            {% image self.avatar fill-75x75 class="circle z-depth-2 responsive-img activator card-title inner-avatar" %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-reveal center">
+                <span class="card-title red-text text-red lighten-1 center" style="padding-bottom:15px;">Contatti e Informazioni
+                    <i class="material-icons right">close</i></span>
+                    {% if self.avatar %}
+                    {% image self.avatar fill-150x150 class="circle z-depth-2 responsive-img" %}
+                    {% endif %}
+                    {% include "demo/includes/contact.html" with contact=self only %}
+                </div>
+            </div>
+            <div class="col s12 m12 l6 item" style="text-align:center;">
+                {% include "demo/includes/related_links.html" with related_links=self.related_links.all only %}
+            </div>
+            <div class="col s12 m12 l6 item" style="text-align:center;">
+                {% include "demo/includes/link_esterno.html" with link_esterno=self.link_esterno.all only %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    {% if self.intro %}
+    <div class="body-content">
+        {{ self.intro|richtext }}
+    </div>
+    {% endif %}
+    <div class="row">
+        {% if self.biography %}
+        <div class="col s12 m12 l12 left txpagina-persona">
+            {{ self.biography|richtext }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+    {% endblock %}
+

@@ -1,0 +1,36 @@
+{% extends "demo/base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load demo_tags static %}
+
+{% block content %}
+{% include "demo/includes/parallasse_eventi.html" %}
+
+
+    {% include "demo/includes/intro.html" with intro=self.intro only %}
+    {# Uses method defined in models.py to retrieve all upcoming events #}
+    {# See also standard index for creating a listing with a tag #}
+    {% with self.events.all as events %}
+<div id="section1" class="mini-content-blog">
+    {% breadcrumbs %}
+    {% include "demo/includes/intro.html" %}
+    <div class="container">
+        <div id="masonry-grid" class="row">
+            {% if events %}
+            {% for event in events %}
+            {% include "demo/includes/event_list_item.html" %}
+            {% endfor %}
+
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    {% if self.campi_dinamici %}
+    <div class="container">
+<div class="body-content">
+    {% include "demo/includes/streamfield.html" with content=self.campi_dinamici %}
+    </div>
+    {% endif %}
+</div></div>
+</div>
+    {% include "demo/includes/related_links.html" with related_links=self.related_links.all only %}
+{% endblock %}

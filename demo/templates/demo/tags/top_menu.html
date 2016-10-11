@@ -1,0 +1,26 @@
+{% load demo_tags wagtailcore_tags wagtailimages_tags static %}
+{% get_site_root as site_root %}
+
+{# Implementation of bootstrap theme dropdown menu - shows top level links and their children #}
+<div id="navi" class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+            <a href="{% pageurl site_root %}" title="{{ site_root.title }}" class="brand-logo center">
+                <img src='{% static "demo/images/logo.png" %}' class="logo-bar"></a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons nav-items"><span>queue_music</span></i></a>
+            <ul class="right hide-on-med-and-down">
+                <li class="nav-items"><a href="/"><i class="material-icons"><span>queue_music</span></i></a></li>
+                {% for menuitem in menuitems %}
+                <li class="nav-items"><a href="{% pageurl menuitem %}"><span><b>{{ menuitem.title }}</b></span></a></li>
+                {% endfor %}
+            </ul>
+        <ul class="side-nav" id="mobile-demo">
+            <li class="nav-items"><a href="/"><span><b>HOME</b></span></a></li>
+            {% for menuitem in menuitems %}
+            <li class="nav-items"><a href="{% pageurl menuitem %}"><span><b>{{ menuitem.title }}</b></span></a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</nav>
+
+</div>

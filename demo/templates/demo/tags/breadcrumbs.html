@@ -1,0 +1,19 @@
+{% load wagtailcore_tags %}
+
+{% if ancestors %}
+<div class="container">
+    <div class="row" >
+        <div class="col s12 breadcrumb-nav">
+            <ul style="display:flex;">
+            {% for ancestor in ancestors %}
+            {% if forloop.last %}
+            <li class="btn btn-flat waves-effect waves-red" style="border:solid 1px #ef5350;margin:5px;"><a href="#!" class="breadcrumb active">{{ ancestor }}</a></li>
+            {% else %}
+            <li class="btn btn-flat waves-effect waves-red" style="border:solid 1px #ef5350;margin:5px;"><a href="{% pageurl ancestor %}" class="breadcrumb"><i class="material-icons">chevron_left</i>{{ ancestor }}</a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        </div>
+    </div>
+</div>
+{% endif %}

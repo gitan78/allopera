@@ -1,0 +1,24 @@
+{% load wagtailcore_tags %}
+{% load static %}
+
+<div class="parallax-container">
+      <div class="parallax">
+          <video src="../media/images/video.mp4" playsinline muted loop autoplay preload height="920px" width="2200px" poster="../media/images/poster.jpg" type="video/mp4">
+		  </video>
+      </div>
+	<div id="introbtn" class="container" style="opacity: 0;">
+		<div class="mini">
+			<button id="section1Btn" class="waves-effect waves-blue-grey btn-flat btn-home white-text text-white"><b>Esplora</b></button>
+		</div>
+	</div>
+		<div id="intro">
+			<div id="video-landing" class="container" style="text-align: center;">
+				<div class="col-md-12">
+					<p>
+						{{ page.body|richtext }}
+					</p>
+					<p>{{ page.secondo_messaggio|richtext }}</p>
+				</div>
+			</div>
+		</div>
+</div>

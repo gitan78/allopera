@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load demo_tags wagtailcore_tags wagtailimages_tags %}
+{% load demo_tags static %}
+
+{% block content %}
+{% breadcrumbs %}
+<div class="container">
+{% include "blog/includes/intro.html" %}
+    </div>
+<div class="row" style="background-color:#525b5c;color:white;">
+    <div class="container">
+            <h6 class="red-text text-red lighten-1 center" style="padding-top:15px;"><b>DETTAGLI EVENTO</b></h6>
+        <div class="col s12 m6 l6 dettagli-evento">
+            <p class="center"><i class="material-icons">date_range</i> Data:
+                {{ self.date_from }}{% if self.date_to %} to {{ self.date_to }}{% endif %}</p>
+            <p class="center"><i class="material-icons">alarm</i> Ora: {% if self.time_from %}{{ self.time_from|time }}{% endif %}
+                {% if self.time_to %} to {{ self.time_to|time }}{% endif %}
+            </p>
+            {% if self.location %}<p class="center"><i class="material-icons">location_on</i> Luogo: {{ self.location }}</p>{% endif %}
+        </div>
+        <div class="col s12 m6 l6 center">
+                        {% if self.audience %}
+            <p class="center"><i class="material-icons">local_activity</i> Ingresso:
+                {# From EVENT_AUDIENCE_CHOICES in models.py #}
+                {{ self.get_audience_display }}</p>
+            {% endif %}
+            {% if self.cost %}
+            <p class="center"><i class="material-icons">shopping_cart</i> Costo: {{ self.cost|safe }}</p>
+            {% endif %}
+
+            {% if self.signup_link %}
+            <p class="center">Sign up: <a href="{{ self.signup_link }}">{{ self.signup_link }}</a></p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+    {% if self.body %}
+        <div class="container">
+            {{ self.body|richtext }}
+        </div>
+    {% endif %}
+
+{% if self.campi_dinamici %}
+    <div class="container ">
+<div class="container body-content">
+    {% include "blog/includes/streamfield.html" with content=self.campi_dinamici %}
+    </div>
+    {% endif %}
+</div>
+
+<h5>Interpreti</h5>
+{% with self.speakers.all as speakers %}
+{% if speakers %}
+<div class="container">
+    <div id="masonry-grid" class="row">
+        {% for speaker in speakers %}
+        <div class="col s6 m4 l3 item grid-item" style="padding:2px;">
+            <div class="card-panel">
+                <div class="row valign-left">
+                    <div class="col s6 m5 l3">
+                        {% if speaker.image %}
+                        <a class="waves-effect waves-block waves-light" href="{{ speaker.link }}">
+                        {% image speaker.image fill-250x250 class="circle responsive-img center" %}</a>
+                        {% endif %}
+                    </div>
+                        <div class="col s6 m7 l9">
+                            {# Speaker name_display fields concatenates first_name and last_name fields #}
+                            <span class="blue-grey-text text-blue-grey left">{{ speaker.name_display }}</span>
+                        </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endwith %}
+{% include 'blog/includes/prev_next.html' %}
+    {% include "blog/includes/related_links.html" with related_links=self.related_links.all only %}
+{% endblock %}

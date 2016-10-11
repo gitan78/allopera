@@ -1,0 +1,64 @@
+{% extends "demo/base.html" %}
+{% load demo_tags static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% block body_class %}template-blogindexpage{% endblock %}
+
+{% block content %}
+
+{% include "demo/includes/parallasse_blog.html" %}
+
+
+{% include "demo/includes/intro.html" with intro=self.intro only %}
+
+<div id="section1">
+    {% breadcrumbs %}
+<div class="mini-content-blog">
+        <div class="container">
+        {% if request.GET.tag|length %}
+<h6 class="blue-grey-text text-blue-grey center">Risultati filtrati per {{ request.GET.tag|safe }} <a href=" {% pageurl self %} " class="red-text text-red-lighten-1">
+    <b>Mostra tutti</b></a></h6>
+{% endif %}
+{% include "demo/includes/intro.html" %}
+        <div id="masonry-grid" class="row" style="padding:0;">
+            {# Uses serve method defined in models.py - allows for paging if required #}
+            {# See also standard index for creating a listing with a tag #}
+            {% for blog in blogs %}
+            {% include "demo/includes/blog_list_item.html" %}
+            {% empty %}
+            No blogs found
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% if self.campi_dinamici %}
+    <div class="container">
+<div class="body-content">
+    {% include "demo/includes/streamfield.html" with content=self.campi_dinamici %}
+    </div>
+    {% endif %}
+</div></div>
+{# Pagination - uses django.core.paginator #}
+{# Append any other url query string variables to the next and previous links - allows tag to be passed through #}
+<div class="container">
+    <div class="row">
+        <div class="col s4 previous">
+            {% if blogs.has_previous %}
+            <a href="?page={{ blogs.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">Previous</a>
+            {% endif %}
+        </div>
+        <div class="col s4 pages">
+            Pagina {{ blogs.number }} di {{ blogs.paginator.num_pages }}
+        </div>
+        <div class="col s4 next">
+            {% if blogs.has_next %}
+            <a href="?page={{ blogs.next_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&amp;{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% include "demo/includes/related_links.html" with related_links=self.related_links.all only %}
+</div>
+</div>
+{% endblock %}
+

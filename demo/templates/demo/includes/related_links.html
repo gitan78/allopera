@@ -1,0 +1,15 @@
+{% if related_links %}
+
+<div class="card  related-link">
+    <div class="card-content white-text">
+        <span><h6 class="center">Link Correlati</h6></span>
+        <div class="card-action">
+            <ul>
+                {% for related_link in related_links %}
+                <li><a class="red-text text-red lighten-1" href="{{ related_link.link }}">{{ related_link.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}

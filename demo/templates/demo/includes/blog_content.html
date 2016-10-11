@@ -1,0 +1,35 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+<div id="masonry-grid" class="row">
+    {% if page.related_links.all %}
+    {% for item in page.related_links.all %}
+    <div class="col s12 m6 l4 item grid-item" style="padding:2px;">
+        <div class="card">
+            <div class="card hoverable">
+                <div class="card-image">
+                    {% if item.collega_immagine %}
+                    <img class="responsive-img" {% image item.collega_immagine max-600x250 %}
+                         {% endif %}
+
+
+                    <p class="meta">{{ item.date }}</p>
+
+
+                    <span>{{ item.categorie }}</span>
+                    <div class="card-content">
+                        {{ item.descrizione }}
+                    </div>
+
+                    <div class="card-action">
+                        <a href="{{ item.link_external }}">{{ item.title }}</a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>

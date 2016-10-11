@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags static %}
+{% load wagtailimages_tags %}
+
+{% block body_class %}template-aboutpage{% endblock %}
+
+{% block content %}
+{% include "blog/includes/parallasse_about.html" %}
+<div id="section1">
+    <div class="row">
+        {% if page.head_body %}
+        <p>{{ page.head_body|richtext }}</p>
+        {% endif %}
+        <div class="col s12 m12 l6 snippet-testo-left">
+            {% if page.snippet_left %}
+            <p>{{ page.snippet_left|richtext }}</p>
+            {% endif %}
+        </div>
+        <div class="col s12 m12 l6 snippet-testo-right">
+            {% if page.snippet_right %}
+            <p>{{ page.snippet_right|richtext }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <div class="video-container">
+            <iframe width="1102" height="620" src="../media/images/video.mp4"
+                    frameborder="0"></iframe>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close btn btn-flat waves-effect waves-red" style="border:solid 1px #ef5350;margin:5px;">Chiudi</a>
+    </div>
+</div>
+
+<div class="carousel carousel-slider" data-indicators="true">
+    {% for item in page.carousel_about.all %}
+    {% include "blog/includes/carousel_about.html" %}
+    {% endfor %}
+</div>
+{% if self.campi_dinamici %}
+    <div class="container ">
+<div class="container body-content">
+    {% include "blog/includes/streamfield.html" with content=self.campi_dinamici %}
+    </div>
+    {% endif %}
+</div>
+    {% include "blog/includes/galleria_persone.html" %}
+</div>
+
+{% endblock %}

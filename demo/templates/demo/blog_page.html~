@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load demo_tags %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+
+{% block content %}
+
+{% breadcrumbs %}
+<div class="container">
+    <div class="row">
+        {% for tag in self.tags.all %}
+        <div class="chip">
+            <a href="{% pageurl self.blog_index %}?tag={{ tag }}">{{ tag }}<i class="close material-icons">touch_app</i>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+{% if self.date %}
+    <p class="red-text text-red lighten-1"><i class="material-icons">date_range</i> {{ self.date }}</p>
+{% endif %}
+{% include "blog/includes/intro.html" %}
+</div>
+{% if self.campi_dinamici %}
+<div class="container">
+<div class="body-content">
+    {% include "blog/includes/streamfield.html" with content=self.campi_dinamici %}
+    </div>
+    </div>
+    {% endif %}
+{% include "blog/includes/galleria_immagini.html" %}
+<div class="container">
+    {% include 'blog/includes/prev_next.html' %}
+    {% include "blog/includes/related_links.html" with related_links=self.related_links.all only %}
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//allopera.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+{% endblock %}

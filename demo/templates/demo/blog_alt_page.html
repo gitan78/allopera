@@ -1,0 +1,19 @@
+{% extends "demo/base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% include_block page.body %}
+
+{% block content %}
+
+{% include "demo/includes/intro.html" %}
+
+{% if self.body %}
+<div class="row">
+    <div class="container">
+        {% include "demo/includes/streamfield.html" with content=self.body %}
+    </div>
+</div>
+    {% endif %}
+
+{% endblock %}

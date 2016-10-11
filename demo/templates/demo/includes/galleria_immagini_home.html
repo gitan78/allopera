@@ -1,0 +1,22 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+	<div id="masonry-grid" class="row">
+		{% if page.galleria_home.all %}
+		{% for item in page.galleria_home.all %}
+		<div class="col s12 m6 l6 item galleria-home" style="padding:0;">
+			<div class="box">
+				{% image item.image original as immagine %}
+				<img src="{{ immagine.url }}" class="responsive-img"
+					 alt="{{ immagine.alt }}"/>
+				<div class="text-overlay">
+					<h4 style="border-bottom:1px solid #ef5350;">{{ item.titolo }}</h4>
+					<p class="center">{{ item.descrizione }}</p>
+					<a href="{{ item.link_external }}"
+					   class="waves-effect waves-red btn-flat btn-home white-text text-white btn-galleria"><b>LEGGI</b></a>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+		{% endif %}
+	</div>

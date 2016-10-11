@@ -1,0 +1,33 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+<div class="card">
+    <div class="card-image waves-effect waves-block waves-light">
+        {% if self.image %}
+        {% image self.image height-350 class="activator responsive-img" %}
+        {% endif %}
+    </div>
+    <div class="card-content">
+        <div class="row">
+            <div class="col s6 m6 l9">
+                {% if self.first_name or self.last_name %}
+                <span class="card-title activator grey-text text-darken-4">{{ self.first_name }} {{ self.last_name }}</span>
+                {% endif %}
+            </div>
+
+            <div class="col s6 m6 l3 right">
+                {% if self.avatar %}
+                {% image self.avatar fill-90x90 class="circle z-depth-2 responsive-img activator inner-avatar" %}
+                {% endif %}
+            </div>
+        </div>
+        <p><a href="#">Social prova</a></p>
+    </div>
+    <div class="card-reveal">
+                <span class="card-title red-text text-red lighten-1 center">Profilo e Contatti
+                    <i class="material-icons right">close</i></span>
+        {% if self.avatar %}
+        {% image self.avatar fill-180x180 class="circle z-depth-2 responsive-img right" %}
+        {% endif %}
+        {% include "blog/includes/contact.html" with contact=self only %}
+    </div>
+</div>

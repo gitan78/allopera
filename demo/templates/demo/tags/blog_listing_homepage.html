@@ -1,0 +1,9 @@
+{% if blogs %}
+
+<h5>Ultimi Progetti</h5>
+
+    {% for blog in blogs %}
+    {% include "demo/includes/blog_list_item.html" %}
+    {% endfor %}
+
+{% endif %}

@@ -1,0 +1,16 @@
+{% if link_esterno %}
+
+    <div class="card  related-link">
+        <div class="card-content white-text">
+            <span><h6 class="center">Link Esterni</h6></span>
+            <div class="card-action">
+                <ul>
+                    {% for link_esterni in link_esterno %}
+                    <li><a class="red-text text-red lighten-1" href="{{ link_esterni.link }}">{{ link_esterni.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+{% endif %}

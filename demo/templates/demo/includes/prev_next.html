@@ -1,0 +1,22 @@
+{% load wagtailcore_tags %}
+
+{% if self.depth > 3 %}{# Previous and next buttons are not relevant for the home page and categories #}
+  {% with prev=self.get_prev_siblings.live.first next=self.get_next_siblings.live.first %}
+<div class="row">
+  <div class="container center">
+    <div class="col s12 m12 l12">
+      <ul class="pagination">
+        <li class="{% if not prev %} disabled{% endif %} btn btn-flat waves-effect waves-red paginazione" style="border:solid 1px #ef5350;margin:5px;">
+          <a href="{% if prev %}{% pageurl prev %}{% else %}#{% endif %}"{% if prev %}title="{{ prev }}" {% endif %}>
+            <i class="material-icons">chevron_left</i> Precedente</a>
+        </li>
+        <li class="{% if not next %} disabled{% endif %} btn btn-flat waves-effect waves-red paginazione" style="border:solid 1px #ef5350;margin:5px;">
+          <a href="{% if next %}{% pageurl next %}{% else %}#{% endif %}" {% if next %}title="{{ next }}" {% endif %}>Successivo <i class="material-icons">chevron_right</i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+  {% endwith %}
+{% endif %}

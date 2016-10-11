@@ -1,0 +1,22 @@
+{% load wagtailcore_tags %}
+{% load static %}
+
+<div class="parallax-container parallax-custom">
+      <div class="parallax">
+          <img src="../media/images/static/parallasse_home_new.jpg">
+      </div>
+	<div id="introbtn" class="container" style="opacity: 0;">
+		<div class="mini">
+			<button id="section1Btn" class="waves-effect waves-red btn-flat btn-home white-text text-white"><b>Esplora <i class="medium material-icons">keyboard_arrow_down</i></b>
+			</button>
+		</div>
+	</div>
+		<div id="intro">
+			<div id="video-landing" class="container land-para" style="text-align: center;">
+			<div class="col-md-12">
+					{{ page.titolo_principale|richtext }}
+					{{ page.secondo_titolo|richtext }}
+			</div>
+			</div>
+		</div>
+</div>

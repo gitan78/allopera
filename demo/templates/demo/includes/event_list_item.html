@@ -1,0 +1,26 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{# Individual event item in a list - used on event index and home page #}
+<div class="col s12 m6 l4 item grid-item" style="padding:2px;">
+  <div class="card">
+    <div class="card hoverable">
+      <div class="card-image">
+        {% if event.feed_image %}
+        {% image event.feed_image original as img %}
+        <a href="{% pageurl event %}"><img class="media-object" src="{{ img.url }}"/></a>
+        {% endif %}
+        <div class="card-content">
+          <h4 class="blue-grey-text text-blue-grey">{{ event.title }}</h4>
+          <p class="red-text text-red lighten-1"><i class="material-icons">date_range</i><strong>{{ event.date_from }}
+            {% if event.date_to %} to {{ event.date_to }}{% endif %}</strong></p>
+          {% if event.search_description %}
+          <p>{{ event.search_description }}</p>
+          {% endif %}
+        </div>
+        <div class="card-action">
+          <a class="red-text text-red lighten-1" href="{% pageurl event %}">Continua a Leggere</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

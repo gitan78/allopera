@@ -1,0 +1,35 @@
+    <div class="col s12 m12 l12 center">
+        {% if contact.address_1 %}
+        <p><i class="material-icons">location_on</i> Indirizzo:
+            {{ contact.address_1 }}</p>
+        {% endif %}
+
+        {% if contact.address_2 %}
+        <p><i class="material-icons">location_on</i> Indirizzo 2:
+            {{ contact.address_2 }}</p>
+        {% endif %}
+
+        {% if contact.city %}
+        <p><i class="material-icons">location_on</i> Città:
+            {{ contact.city }}</p>
+        {% endif %}
+        {% if contact.country %}
+        <p><i class="material-icons">language</i> Paese:
+            {{ contact.country }}</p>
+        {% endif %}
+
+        {% if contact.post_code %}
+        <p><i class="material-icons">date_range</i> CAP:
+            {{ contact.post_code }}</p>
+        {% endif %}
+                {% if contact.telephone %}
+        <p><i class="material-icons">phone</i> Telefono:
+            {{ contact.telephone }}</p>
+        {% endif %}
+
+        {% if contact.email %}
+        <p><i class="material-icons">mail</i> Email:
+            {{ contact.email }}</p>
+        {% endif %}
+    </div>
+</div>

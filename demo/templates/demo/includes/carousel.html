@@ -1,0 +1,9 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% if page.carousel_about.all %}
+<div class="carousel carousel-slider">
+    {% for item in page.carousel_about.all %}
+    {% image item.image original as immagine %}
+    <a class="carousel-item" href="#one!"><img src="{{ immagine.url }}"></a>
+  </div>

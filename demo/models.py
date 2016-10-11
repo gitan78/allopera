@@ -1,0 +1,827 @@
+from datetime import date
+
+from django.db import models
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
+from django import forms
+
+from wagtail.wagtailcore.models import Page, Orderable
+from wagtail.wagtailcore.fields import RichTextField, StreamField
+from wagtail.wagtailadmin.edit_handlers import FieldPanel, FieldRowPanel, MultiFieldPanel, \
+    InlinePanel, PageChooserPanel, StreamFieldPanel
+from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+from wagtail.wagtaildocs.edit_handlers import DocumentChooserPanel
+from wagtail.wagtailsnippets.models import register_snippet
+from wagtail.wagtailforms.models import AbstractEmailForm, AbstractFormField
+from wagtail.wagtailsearch import index
+
+from wagtail.wagtailcore.blocks import TextBlock, StructBlock, StreamBlock, FieldBlock, CharBlock, RichTextBlock, RawHTMLBlock
+from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.wagtaildocs.blocks import DocumentChooserBlock
+
+from modelcluster.fields import ParentalKey
+from modelcluster.tags import ClusterTaggableManager
+from taggit.models import TaggedItemBase
+from django.core.mail import send_mail
+
+
+
+CATEGORIE_CHOICES = (
+    ('spettacoli', "Spettacoli"),
+    ('notizie', "Notizie"),
+    ('appuntamenti', "Appuntamenti"),
+)
+
+
+EVENT_AUDIENCE_CHOICES = (
+    ('libero', "Libero"),
+    ('pagamento', "Pagamento"),
+)
+
+
+class PullQuoteBlock(StructBlock):
+    quote = TextBlock("quote title")
+    attribution = CharBlock()
+
+    class Meta:
+        icon = "openquote"
+
+
+class ImageFormatChoiceBlock(FieldBlock):
+    field = forms.ChoiceField(choices=(
+        ('left', 'Wrap left'), ('right', 'Wrap right'), ('center', 'Mid width'), ('full', 'Full width'),
+    ))
+
+
+class HTMLAlignmentChoiceBlock(FieldBlock):
+    field = forms.ChoiceField(choices=(
+        ('normal', 'Normal'), ('full', 'Full width'),
+    ))
+
+
+class ImageBlock(StructBlock):
+    image = ImageChooserBlock()
+    caption = RichTextBlock()
+    alignment = ImageFormatChoiceBlock()
+
+
+class AlignedHTMLBlock(StructBlock):
+    html = RawHTMLBlock()
+    alignment = HTMLAlignmentChoiceBlock()
+
+    class Meta:
+        icon = "code"
+
+
+class DemoStreamBlock(StreamBlock):
+    h2 = CharBlock(icon="title", classname="title")
+    h3 = CharBlock(icon="title", classname="title")
+    h4 = CharBlock(icon="title", classname="title")
+    h5 = CharBlock(icon="title", classname="title")
+    h6 = CharBlock(icon="title", classname="title")
+    intro = RichTextBlock(icon="pilcrow")
+    paragraph = RichTextBlock(icon="pilcrow")
+    aligned_image = ImageBlock(label="Aligned image", icon="image")
+    pullquote = PullQuoteBlock()
+    aligned_html = AlignedHTMLBlock(icon="code", label='Raw HTML')
+    document = DocumentChooserBlock(icon="doc-full-inverse")
+
+
+class LinkFields(models.Model):
+    link_external = models.URLField("External link", blank=True)
+    link_page = models.ForeignKey(
+        'wagtailcore.Page',
+        null=True,
+        blank=True,
+        related_name='+'
+    )
+    link_document = models.ForeignKey(
+        'wagtaildocs.Document',
+        null=True,
+        blank=True,
+        related_name='+'
+    )
+
+    @property
+    def link(self):
+        if self.link_page:
+            return self.link_page.url
+        elif self.link_document:
+            return self.link_document.url
+        else:
+            return self.link_external
+
+    panels = [
+        FieldPanel('link_external'),
+        PageChooserPanel('link_page'),
+        DocumentChooserPanel('link_document'),
+    ]
+
+    class Meta:
+        abstract = True
+
+
+class ContactFields(models.Model):
+    telephone = models.CharField("Telefono", max_length=20, blank=True)
+    email = models.EmailField(blank=True)
+    address_1 = models.CharField("Indirizzo", max_length=255, blank=True)
+    address_2 = models.CharField("Indirizzo Alt", max_length=255, blank=True)
+    city = models.CharField("Citta", max_length=255, blank=True)
+    country = models.CharField("Nazione", max_length=255, blank=True)
+    post_code = models.CharField("CAP", max_length=10, blank=True)
+
+    panels = [
+        FieldPanel('telephone'),
+        FieldPanel('email'),
+        FieldPanel('address_1'),
+        FieldPanel('address_2'),
+        FieldPanel('city'),
+        FieldPanel('country'),
+        FieldPanel('post_code'),
+    ]
+
+    class Meta:
+        abstract = True
+
+
+class GalleriaImmagini(LinkFields):
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    titolo = models.CharField(max_length=55, blank=True)
+    descrizione = models.CharField(max_length=155, blank=True)
+
+    panels = [
+        ImageChooserPanel('image'),
+        FieldPanel('titolo'),
+        FieldPanel('descrizione'),
+        MultiFieldPanel(LinkFields.panels, "Link"),
+    ]
+
+    class Meta:
+        abstract = True
+
+
+class CarouselItem(LinkFields):
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    titolo = RichTextField("Titolo Carousel", blank=True)
+    descrizione = RichTextField("Descrizione Carousel", blank=True)
+    embed_url = models.URLField("Embed URL", blank=True)
+    stile_slide = models.CharField(max_length=55, blank=True)
+
+    panels = [
+        ImageChooserPanel('image'),
+        FieldPanel('titolo'),
+        FieldPanel('embed_url'),
+        FieldPanel('descrizione'),
+        FieldPanel('stile_slide'),
+        MultiFieldPanel(LinkFields.panels, "Link"),
+    ]
+
+    class Meta:
+        abstract = True
+
+
+class RelatedLink(LinkFields):
+    title = models.CharField(max_length=255, help_text="Link title")
+
+    panels = [
+        FieldPanel('title'),
+        MultiFieldPanel(LinkFields.panels, "Link"),
+    ]
+
+    class Meta:
+        abstract = True
+
+
+class LinkEsterno(LinkFields):
+    title = models.CharField(max_length=255, help_text="Link title")
+
+    panels = [
+        FieldPanel('title'),
+        MultiFieldPanel(LinkFields.panels, "Link"),
+    ]
+
+    class Meta:
+        abstract = True
+
+
+# Advert Snippet
+
+class AdvertPlacement(models.Model):
+    page = ParentalKey('wagtailcore.Page', related_name='advert_placements')
+    advert = models.ForeignKey('demo.Advert', related_name='+')
+
+
+class Advert(models.Model):
+    page = models.ForeignKey(
+        'wagtailcore.Page',
+        related_name='adverts',
+        null=True,
+        blank=True
+    )
+    url = models.URLField(null=True, blank=True)
+    text = models.CharField(max_length=255)
+
+    panels = [
+        PageChooserPanel('page'),
+        FieldPanel('url'),
+        FieldPanel('text'),
+    ]
+
+    def __unicode__(self):
+        return self.text
+
+register_snippet(Advert)
+
+
+# Home Page
+
+class HomePageCarouselItem(Orderable, CarouselItem):
+    page = ParentalKey('demo.HomePage', related_name='carousel_items')
+
+
+class HomePageRelatedLink(Orderable, RelatedLink):
+    page = ParentalKey('demo.HomePage', related_name='related_links')
+
+
+class HomePage(Page):
+    campi_dinamici = StreamField(DemoStreamBlock())
+    search_fields = Page.search_fields + [
+        index.SearchField('campi_dinamici'),
+    ]
+    titolo_principale = RichTextField("Titolo Parallasse", blank=True)
+    secondo_titolo = RichTextField("Secondo Titolo Parallasse", blank=True)
+
+    class Meta:
+        verbose_name = "Pagina Principale Custom"
+
+HomePage.content_panels = Page.content_panels + [
+    FieldPanel('titolo_principale', classname="full"),
+    FieldPanel('secondo_titolo', classname="full"),
+    InlinePanel('galleria_home', label="Galleria"),
+    StreamFieldPanel('campi_dinamici'),
+    InlinePanel('related_links', label="Related links"),
+]
+
+HomePage.promote_panels = Page.promote_panels
+
+
+class HomePageGalleria(Orderable, GalleriaImmagini):
+    page = ParentalKey('demo.HomePage', related_name='galleria_home')
+
+
+class AboutPage(Page):
+    campi_dinamici = StreamField(DemoStreamBlock())
+    titolo_principale = RichTextField("Titolo Parallasse", blank=True)
+    secondo_titolo = RichTextField("Secondo Titolo Parallasse", blank=True)
+    head_body = RichTextField("Titolo Corpo", blank=True)
+    snippet_left = RichTextField("Testo di Sinistra", blank=True)
+    snippet_right = RichTextField("Testo di Destra", blank=True)
+
+    class Meta:
+        verbose_name = "Pagina Chi Siamo"
+
+    content_panels = Page.content_panels + [
+        FieldPanel('titolo_principale', classname="full"),
+        FieldPanel('secondo_titolo', classname="full"),
+        FieldPanel('head_body', classname="full"),
+        FieldPanel('snippet_left', classname="full"),
+        FieldPanel('snippet_right', classname="full"),
+        InlinePanel('carousel_about', label="Slider"),
+        StreamFieldPanel('campi_dinamici'),
+        InlinePanel('galleria_persone', label="Galleria"),
+    ]
+
+
+class AboutPageGalleria(Orderable, GalleriaImmagini):
+    page = ParentalKey('demo.AboutPage', related_name='galleria_persone')
+
+
+class AboutPageCarousel(Orderable, CarouselItem):
+    page = ParentalKey('demo.AboutPage', related_name='carousel_about')
+
+
+# Standard index page
+
+class StandardIndexPageRelatedLink(Orderable, RelatedLink):
+    page = ParentalKey('demo.StandardIndexPage', related_name='related_links')
+
+
+class StandardIndexPage(Page):
+    intro = RichTextField(blank=True)
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    search_fields = Page.search_fields + [
+        index.SearchField('intro'),
+    ]
+
+StandardIndexPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('intro', classname="full"),
+    InlinePanel('related_links', label="Related links"),
+]
+
+StandardIndexPage.promote_panels = Page.promote_panels + [
+    ImageChooserPanel('feed_image'),
+]
+
+
+# Standard page
+
+class StandardPageCarouselItem(Orderable, CarouselItem):
+    page = ParentalKey('demo.StandardPage', related_name='carousel_items')
+
+
+class StandardPageRelatedLink(Orderable, RelatedLink):
+    page = ParentalKey('demo.StandardPage', related_name='related_links')
+
+
+class StandardPage(Page):
+    intro = RichTextField(blank=True)
+    body = RichTextField(blank=True)
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    search_fields = Page.search_fields + [
+        index.SearchField('intro'),
+        index.SearchField('body'),
+    ]
+
+StandardPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('intro', classname="full"),
+    InlinePanel('carousel_items', label="Carousel items"),
+    FieldPanel('body', classname="full"),
+    InlinePanel('related_links', label="Related links"),
+]
+
+StandardPage.promote_panels = Page.promote_panels + [
+    ImageChooserPanel('feed_image'),
+]
+
+
+# Blog index page
+class BlogIndexPageLinkEsterno(Orderable, LinkEsterno):
+    page = ParentalKey('demo.BlogIndexPage', related_name='link_esterno')
+
+
+class BlogIndexPageRelatedLink(Orderable, RelatedLink):
+    page = ParentalKey('demo.BlogIndexPage', related_name='related_links')
+
+
+class BlogIndexPage(Page):
+    campi_dinamici = StreamField(DemoStreamBlock())
+    intro = RichTextField("Titolo Corpo",blank=True)
+    titolo_principale = RichTextField("Titolo Parallasse", blank=True)
+    secondo_titolo = RichTextField("Secondo Titolo Parallasse", blank=True)
+    search_fields = Page.search_fields + [
+        index.SearchField('intro'),
+    ]
+
+    @property
+    def blogs(self):
+        # Get list of live blog pages that are descendants of this page
+        blogs = BlogPage.objects.live().descendant_of(self)
+
+        # Order by most recent date first
+        blogs = blogs.order_by('-date')
+
+        return blogs
+
+    def get_context(self, request):
+        # Get blogs
+        blogs = self.blogs
+
+        # Filter by tag
+        tag = request.GET.get('tag')
+        if tag:
+            blogs = blogs.filter(tags__name=tag)
+
+        # Pagination
+        page = request.GET.get('page')
+        paginator = Paginator(blogs, 10)  # Show 10 blogs per page
+        try:
+            blogs = paginator.page(page)
+        except PageNotAnInteger:
+            blogs = paginator.page(1)
+        except EmptyPage:
+            blogs = paginator.page(paginator.num_pages)
+
+        # Update template context
+        context = super(BlogIndexPage, self).get_context(request)
+        context['blogs'] = blogs
+        return context
+
+    class Meta:
+        verbose_name = "Pagina Indice Progetti"
+
+BlogIndexPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('titolo_principale', classname="full"),
+    FieldPanel('secondo_titolo', classname="full"),
+    FieldPanel('intro', classname="full"),
+    StreamFieldPanel('campi_dinamici'),
+    InlinePanel('related_links', label="Link Correlati"),
+    InlinePanel('link_esterno', label="Link Esterni"),
+]
+
+BlogIndexPage.promote_panels = Page.promote_panels
+
+
+# Blog page
+
+class BlogPageCarouselItem(Orderable, CarouselItem):
+    page = ParentalKey('demo.BlogPage', related_name='carousel_items')
+
+
+class BlogPageRelatedLink(Orderable, RelatedLink):
+    page = ParentalKey('demo.BlogPage', related_name='related_links')
+
+class BlogPageLinkEsterno(Orderable, LinkEsterno):
+    page = ParentalKey('demo.BlogPage', related_name='link_esterno')
+
+
+class BlogPageTag(TaggedItemBase):
+    content_object = ParentalKey('demo.BlogPage', related_name='tagged_items')
+
+
+class BlogPage(Page):
+    campi_dinamici = StreamField(DemoStreamBlock())
+    tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
+    intro = RichTextField(blank=True)
+    date = models.DateField("Data Pubblicazione",
+                            null=True,
+                            blank=True,
+                            )
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    search_fields = Page.search_fields + [
+        index.SearchField('campi_dinamici'),
+    ]
+
+    class Meta:
+        verbose_name = "Pagina Progetto"
+
+
+    @property
+    def blog_index(self):
+        # Find closest ancestor which is a blog index
+        return self.get_ancestors().type(BlogIndexPage).last()
+
+BlogPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('intro', classname="full"),
+    FieldPanel('date'),
+    StreamFieldPanel('campi_dinamici'),
+    InlinePanel('galleria_blog', label="Galleria"),
+    InlinePanel('related_links', label="Link Correlati"),
+    InlinePanel('related_links', label="Link Esterni"),
+]
+
+BlogPage.promote_panels = Page.promote_panels + [
+    ImageChooserPanel('feed_image'),
+    FieldPanel('tags'),
+]
+
+
+class BlogPageGalleria(Orderable, GalleriaImmagini):
+    page = ParentalKey('demo.BlogPage', related_name='galleria_blog')
+
+# Person page
+
+class PersonPageRelatedLink(Orderable, RelatedLink):
+    page = ParentalKey('demo.PersonPage', related_name='related_links')
+
+
+class PersonPageLinkEsterno(Orderable, LinkEsterno):
+    page = ParentalKey('demo.PersonPage', related_name='link_esterno')
+
+
+class PersonPage(Page, ContactFields):
+    first_name = models.CharField('Nome', max_length=255)
+    last_name = models.CharField('Cognome', max_length=255)
+    intro = RichTextField(blank=True)
+    biography = RichTextField('Curriculum', blank=True)
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    avatar = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    class Meta:
+        verbose_name = "Pagina Persona"
+
+    search_fields = Page.search_fields + [
+        index.SearchField('first_name'),
+        index.SearchField('last_name'),
+        index.SearchField('intro'),
+        index.SearchField('biography'),
+    ]
+
+PersonPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('first_name'),
+    FieldPanel('last_name'),
+    FieldPanel('intro', classname="full"),
+    FieldPanel('biography', classname="full"),
+    ImageChooserPanel('avatar'),
+    ImageChooserPanel('image'),
+    MultiFieldPanel(ContactFields.panels, "Contact"),
+    InlinePanel('related_links', label="Link COrrelati"),
+    InlinePanel('link_esterno', label="Link Esterni"),
+]
+
+PersonPage.promote_panels = Page.promote_panels + [
+    ImageChooserPanel('feed_image'),
+]
+
+
+# Contact page
+
+class ContactPage(Page, ContactFields):
+    body = RichTextField(blank=True)
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    search_fields = Page.search_fields + [
+        index.SearchField('body'),
+    ]
+
+    class Meta:
+        verbose_name = "Pagina Contatti"
+
+ContactPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('body', classname="full"),
+    MultiFieldPanel(ContactFields.panels, "Contact"),
+]
+
+ContactPage.promote_panels = Page.promote_panels + [
+    ImageChooserPanel('feed_image'),
+]
+
+
+# Event index page
+
+class EventIndexPageRelatedLink(Orderable, RelatedLink):
+    page = ParentalKey('EventIndexPage', related_name='related_links')
+
+
+class EventIndexPageLinkEsterno(Orderable, LinkEsterno):
+    page = ParentalKey('EventIndexPage', related_name='link_esterno')
+
+
+class EventIndexPage(Page):
+    campi_dinamici = StreamField(DemoStreamBlock())
+    intro = RichTextField("Titolo Corpo", blank=True)
+    titolo_principale = RichTextField("Titolo Parallasse", blank=True)
+    secondo_titolo = RichTextField("Secondo Titolo Parallasse", blank=True)
+    search_fields = Page.search_fields + [
+        index.SearchField('intro'),
+    ]
+
+    @property
+    def events(self):
+        # Get list of live event pages that are descendants of this page
+        events = EventPage.objects.live().descendant_of(self)
+
+        # Filter events list to get ones that are either
+        # running now or start in the future
+        events = events.filter(date_from__gte=date.today())
+
+        # Order by date
+        events = events.order_by('date_from')
+
+        return events
+
+    class Meta:
+        verbose_name = "Pagina Indice Eventi"
+
+EventIndexPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('titolo_principale', classname="full"),
+    FieldPanel('secondo_titolo', classname="full"),
+    FieldPanel('intro', classname="full"),
+    StreamFieldPanel('campi_dinamici'),
+    InlinePanel('related_links', label="Link Correlati"),
+    InlinePanel('link_esterno', label="Link Esterni"),
+]
+
+EventIndexPage.promote_panels = Page.promote_panels
+
+# Event page
+
+# class EventPageCarouselItem(Orderable, CarouselItem):
+#     page = ParentalKey('demo.EventPage', related_name='carousel_items')
+
+
+class EventPageRelatedLink(Orderable, RelatedLink):
+    page = ParentalKey('demo.EventPage', related_name='related_links')
+
+
+class EventPageLinkEsterno(Orderable, LinkEsterno):
+    page = ParentalKey('demo.EventPage', related_name='link_esterno')
+
+
+class EventPageSpeaker(Orderable, LinkFields):
+    page = ParentalKey('EventPage', related_name='speakers')
+    first_name = models.CharField("Name", max_length=255, blank=True)
+    last_name = models.CharField("Surname", max_length=255, blank=True)
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    @property
+    def name_display(self):
+        return self.first_name + " " + self.last_name
+
+    panels = [
+        FieldPanel('first_name'),
+        FieldPanel('last_name'),
+        ImageChooserPanel('image'),
+        MultiFieldPanel(LinkFields.panels, "Link"),
+    ]
+
+
+class EventPage(Page):
+    campi_dinamici = StreamField(DemoStreamBlock())
+    intro = RichTextField("Titolo Corpo",blank=True)
+    date_from = models.DateField("Data Inizio")
+    image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    avatar = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+    date_to = models.DateField(
+        "Data Fine",
+        null=True,
+        blank=True,
+        help_text="Non richiesta per eventi singoli"
+    )
+    time_from = models.TimeField("Ora Inizio", null=True, blank=True)
+    time_to = models.TimeField("Ora Fine", null=True, blank=True)
+    audience = models.CharField("Ingresso", max_length=255, choices=EVENT_AUDIENCE_CHOICES)
+    location = models.CharField(max_length=255)
+    body = RichTextField(blank=True)
+    cost = models.CharField(max_length=255)
+    signup_link = models.URLField(blank=True)
+    feed_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    search_fields = Page.search_fields + [
+        index.SearchField('get_audience_display'),
+        index.SearchField('location'),
+        index.SearchField('body'),
+        index.SearchField('campi_dinamici'),
+    ]
+
+    class Meta:
+        verbose_name = "Pagina Evento"
+
+    @property
+    def event_index(self):
+        # Find closest ancestor which is an event index
+        return self.get_ancestors().type(EventIndexPage).last()
+
+    def serve(self, request):
+        if "format" in request.GET:
+            if request.GET['format'] == 'ical':
+                # Export to ical format
+                response = HttpResponse(
+                    export_event(self, 'ical'),
+                    content_type='text/calendar',
+                )
+                response['Content-Disposition'] = 'attachment; filename=' + self.slug + '.ics'
+                return response
+            else:
+                # Unrecognised format error
+                message = 'Could not export event\n\nUnrecognised format: ' + request.GET['format']
+                return HttpResponse(message, content_type='text/plain')
+        else:
+            # Display event page as usual
+            return super(EventPage, self).serve(request)
+
+EventPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('intro', classname="full"),
+    FieldPanel('date_from'),
+    FieldPanel('date_to'),
+    FieldPanel('time_from'),
+    FieldPanel('time_to'),
+    FieldPanel('location'),
+    FieldPanel('audience'),
+    FieldPanel('cost'),
+    FieldPanel('signup_link'),
+    ImageChooserPanel('avatar'),
+    ImageChooserPanel('image'),
+    StreamFieldPanel('campi_dinamici'),
+    FieldPanel('body', classname="full"),
+    InlinePanel('speakers', label="Speakers"),
+    InlinePanel('related_links', label="Link Correlati"),
+    InlinePanel('link_esterno', label="Link Esterni"),
+]
+
+EventPage.promote_panels = Page.promote_panels + [
+    ImageChooserPanel('feed_image'),
+]
+
+
+class FormField(AbstractFormField):
+    page = ParentalKey('demo.FormPage', related_name='form_fields')
+
+
+class FormPage(AbstractEmailForm):
+    intro = RichTextField(blank=True)
+    thank_you_text = RichTextField(blank=True)
+
+FormPage.content_panels = [
+    FieldPanel('title', classname="full title"),
+    FieldPanel('intro', classname="full"),
+    InlinePanel('form_fields', label="Form fields"),
+    FieldPanel('thank_you_text', classname="full"),
+    MultiFieldPanel([
+        FieldRowPanel([
+            FieldPanel('from_address', classname="col6"),
+            FieldPanel('to_address', classname="col6"),
+        ]),
+        FieldPanel('subject'),
+    ], "Email"),
+]
+send_mail('subject', 'message', 'giacomo.tantalocco@gmail.com', ['meroviem@gmail.com'], fail_silently=False)
+
+
+class LegacyPage(Page):
+    body = RichTextField("Titolo Parallasse", blank=True)
+    secondo_messaggio = RichTextField("Secondo Titolo Parallasse", blank=True)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('body', classname="full"),
+        FieldPanel('secondo_messaggio', classname="full")
+    ]

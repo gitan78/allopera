@@ -1,0 +1,9 @@
+{% if events %}
+
+<h5>Prissimi Eventi</h5>
+
+        {% for event in events %}
+        {% include "demo/includes/event_list_item.html" %}
+        {% endfor %}
+
+{% endif %}

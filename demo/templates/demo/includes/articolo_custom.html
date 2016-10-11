@@ -1,0 +1,21 @@
+{% load wagtailcore_tags %}
+{% load static %}
+
+{% if page.head_body %}
+<h3 class="center blue-grey-text text-blue-grey">{{ page.head_body|richtext }}</h3>
+{% endif %}
+<div id="section1">
+	<div class="row">
+		<div class="col s12 m12 l6 snippet-testo-left">
+			{% if page.snippet_left %}
+			<p>{{ page.snippet_left|richtext }}</p>
+			{% endif %}
+		</div>
+
+		<div class="col s12 m12 l6 snippet-testo-right">
+			{% if page.snippet_right %}
+			<p>{{ page.snippet_right|richtext }}</p>
+			{% endif %}
+		</div>
+	</div>
+</div>

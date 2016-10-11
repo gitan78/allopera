@@ -1,0 +1,717 @@
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700');
+/* line 8, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+html {
+  font-family: GillSans, Calibri, Trebuchet, sans-serif; }
+
+/* fonts */
+/* line 13, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+body {
+  font-family: 'Dosis', sans-serif;
+  font-size: 19px;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  position: relative;
+  color: #525b5c;
+  background-color: white; }
+
+/* line 24, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+h1, h2, h3, h4, h5 {
+  clear: both;
+  font-family: 'Raleway', sans-serif;
+  color: white; }
+
+/* line 30, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+h5 {
+  clear: both;
+  font-family: 'Raleway', sans-serif;
+  color: white; }
+
+/* line 35, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+h6 {
+  clear: both;
+  font-family: 'Raleway', sans-serif;
+  color: blue; }
+
+/* body image styles - classes supplied by rich text editor */
+/* line 41, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.body-content {
+  width: 100%;
+  overflow: hidden;
+  clear: both;
+  margin-bottom: 1em; }
+  /* line 46, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .body-content img {
+    margin-bottom: 2%;
+    margin-top: 2%; }
+  /* line 51, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .body-content img.full-width {
+    width: 100%; }
+  /* line 55, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .body-content img.left {
+    width: 45%;
+    margin-right: 5%;
+    float: left; }
+  /* line 61, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .body-content img.right {
+    width: 45%;
+    margin-left: 5%;
+    float: right; }
+
+/* line 70, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.img-wrapper {
+  margin-bottom: 1em;
+  position: relative; }
+  /* line 74, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .img-wrapper img {
+    display: block;
+    width: 100%;
+    margin-bottom: 0; }
+  /* line 80, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .img-wrapper.left {
+    float: left;
+    width: 45%;
+    margin-right: 5%; }
+  /* line 85, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .img-wrapper.right {
+    float: right;
+    width: 45%;
+    margin-left: 5%; }
+
+/* line 92, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.intro {
+  font-size: 1.4em; }
+
+/* line 96, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.caption {
+  padding: 0.2em 1em 0.2em 0.5em;
+  margin: 0;
+  font-weight: 400;
+  background: #F2f2f2;
+  font-style: italic;
+  display: inline-block;
+  z-index: 2;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  font-size: 0.9em;
+  max-width: calc(100% - 10px); }
+  /* line 110, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .caption p {
+    margin: 0 !important; }
+
+/* line 115, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+blockquote {
+  margin: 2em 0; }
+  /* line 118, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  blockquote span {
+    display: block;
+    color: #AAA;
+    font-size: 0.8em; }
+
+/* List styling - tweaks to include images */
+/* line 128, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+a.list-group-item {
+  clear: both;
+  width: 100%;
+  overflow: hidden; }
+  /* line 132, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  a.list-group-item .list-group-item-text {
+    margin-top: 1%; }
+    /* line 134, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+    a.list-group-item .list-group-item-text img {
+      float: left;
+      margin-right: 2%;
+      margin-bottom: 1%; }
+
+/* Style pager */
+/* line 143, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.col s4.pages {
+  text-align: center; }
+
+/* line 147, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.col s4.next {
+  text-align: right; }
+
+/* line 151, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.main {
+  padding-top: 66px;
+  min-height: 700px; }
+
+/*-------------------------------*/
+/*           Carousel    */
+/*-------------------------------*/
+/* line 159, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.carousel {
+  margin-bottom: 15px; }
+  /* line 161, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .carousel .carousel-slider {
+    height: 300px !important; }
+  /* line 164, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .carousel .carousel-item {
+    padding-top: 45px; }
+  /* line 167, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .carousel .carousel-intro {
+    font-size: 59px !important;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    color: white !important; }
+  /* line 173, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .carousel .carousel-body {
+    font-size: 39px !important;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    color: white !important; }
+  /* line 179, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .carousel .carousel-caption {
+    background-color: rgba(0, 127, 127, 0.6);
+    padding-top: 0; }
+    /* line 182, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+    .carousel .carousel-caption .btn {
+      margin-bottom: 10px; }
+
+/* line 188, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+p {
+  text-align: justify; }
+  /* line 191, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  p:last-child {
+    margin-bottom: 0; }
+
+/* line 196, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.advert-list {
+  margin-top: 15px;
+  margin-bottom: 0;
+  padding: 15px 0; }
+
+/* line 202, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.pages {
+  opacity: 0; }
+
+/*-------------------------------*/
+/*           VERIFICARE!!        */
+/*-------------------------------*/
+/* line 208, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.mini {
+  text-align: center;
+  top: 0;
+  width: 100%;
+  margin: 0;
+  padding: 20px; }
+
+/* line 215, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.mini-content {
+  padding-top: 0;
+  border-top: solid 1px #ef5350; }
+
+/* line 219, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.mini-content-blog {
+  padding-top: 0; }
+
+/*-------------------------------*/
+/*           BOTTONI             */
+/*-------------------------------*/
+/* line 225, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.btn-home {
+  border: solid 1px #ef5350;
+  color: white;
+  height: 55px;
+  font-family: 'Raleway', sans-serif; }
+
+/* line 231, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.btn-galleria {
+  border: solid 1px #ef5350;
+  height: 35px;
+  font-family: 'Raleway', sans-serif;
+  color: white; }
+
+/* line 237, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.btn-persone {
+  border: solid 1px #ef5350;
+  height: 35px;
+  font-family: 'Raleway', sans-serif; }
+
+/*-------------------------------*/
+/*           NAVBAR              */
+/*-------------------------------*/
+/* line 245, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.side-nav {
+  margin-top: 75px; }
+
+/* line 248, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.navbar-fixed {
+  height: 75px !important; }
+
+/* line 251, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+nav {
+  background-color: #fff !important;
+  height: 75px !important; }
+
+/* line 256, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.nav-wrapper {
+  height: 75px !important;
+  font-family: 'Raleway', sans-serif;
+  font-weight: bold; }
+
+/* line 262, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+nav a {
+  color: #525b5c !important;
+  height: 75px; }
+
+/* line 266, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+nav li:hover {
+  background-color: white; }
+
+/* line 269, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.button-collapse {
+  height: 100%;
+  width: 65px; }
+
+/* line 271, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#navi {
+  opacity: 0; }
+
+/* line 275, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.logo-bar {
+  padding-top: 5px; }
+
+/* line 278, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.inner-avatar {
+  position: absolute;
+  margin-top: -8%;
+  margin-left: 2%;
+  z-index: 1; }
+
+/* line 280, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.related-link {
+  background-color: #525b5c !important; }
+
+/*-------------------------------*/
+/*           BREADCRUMB          */
+/*-------------------------------*/
+/* line 284, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.breadcrumb-nav {
+  margin-top: 15px !important;
+  border-bottom: solid 1px #ef5350; }
+
+/* line 288, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.breadcrumb {
+  color: #525b5c !important;
+  font-size: 17px;
+  display: inline; }
+
+/* line 296, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.paginazione {
+  height: 40px !important; }
+
+/* line 298, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.picpagina-persona {
+  margin-top: 5px; }
+
+/* line 299, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.txpagina-persona {
+  text-align: justify; }
+
+/*-------------------------------*/
+/*           Masonry Gallery     */
+/*-------------------------------*/
+/* line 304, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.item {
+  padding: 0;
+  margin: 0; }
+
+/*-------------------------------*/
+/*           Preloader           */
+/*-------------------------------*/
+/* line 311, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  overflow: hidden; }
+
+/* line 320, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#loader {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #ef5350;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+  z-index: 11; }
+
+/* line 335, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #fff;
+  -webkit-animation: spin 1.2s linear infinite;
+  animation: spin 1.2s linear infinite; }
+
+/* line 348, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #78909c;
+  -webkit-animation: spin 3s linear infinite;
+  animation: spin 1s linear infinite; }
+
+/*-------------------------------*/
+/*           Animazioni Css3     */
+/*-------------------------------*/
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg); } }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
+/* line 373, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#loader-wrapper .loader-section {
+  position: fixed;
+  top: 0;
+  width: 51%;
+  height: 100%;
+  background: #525b5c;
+  z-index: 10; }
+
+/* line 381, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#loader-wrapper .loader-section.section-left {
+  left: 0; }
+
+/* line 384, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#loader-wrapper .loader-section.section-right {
+  right: 0; }
+
+/*-------------------------------*/
+/*           Stile Preloader     */
+/*-------------------------------*/
+/* line 392, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.loaded #loader-wrapper .loader-section.section-left {
+  transform: translateX(-100%);
+  transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1); }
+
+/* line 396, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.loaded #loader-wrapper .loader-section.section-right {
+  transform: translateX(100%);
+  transition: all 0.7s 0.3s cubic-bezier(0.645, 0.045, 0.355, 1); }
+
+/* line 401, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.loaded #loader {
+  opacity: 0;
+  transition: all 0.3s ease-out; }
+
+/* line 405, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.loaded #loader-wrapper {
+  visibility: hidden;
+  transform: translateY(-100%);
+  transition: all 0.3s 1s ease-out; }
+
+/* line 410, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+hr {
+  border-color: #424242; }
+
+/* line 413, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#logo-preloader {
+  opacity: 0;
+  text-align: center;
+  padding-left: 650px;
+  display: fixed; }
+
+/*-------------------------------*/
+/*           Articolo Custom          */
+/*-------------------------------*/
+/* line 422, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.snippet-testo-left {
+  background-color: #525b5c;
+  border-right: solid 1px #ef5350;
+  color: white;
+  font-family: 'Raleway', sans-serif;
+  font-size: 31px;
+  text-align: left; }
+
+/* line 430, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.snippet-testo-right {
+  background-color: #525b5c;
+  color: white;
+  text-align: justify; }
+
+/* line 435, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.dettagli-evento {
+  border-right: solid 1px #ef5350;
+  text-align: center; }
+
+/* line 439, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.wrap-persona {
+  background-color: #525b5c;
+  color: white;
+  padding-top: 85px; }
+
+/* line 440, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.dettagli-persona {
+  border-left: solid 1px #ef5350;
+  text-align: center; }
+
+/*-------------------------------*/
+/*           Parallasse          */
+/*-------------------------------*/
+/* line 447, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.parallax-container {
+  height: 960px; }
+
+/* line 450, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+#section1 {
+  opacity: 1;
+  top: 0; }
+
+/* line 451, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.galleria-home {
+  width: 100%;
+  overflow: hidden;
+  max-height: 460px;
+  top: 0; }
+
+/*-------------------------------*/
+/*           GALLERIA CUSTOM     */
+/*-------------------------------*/
+/* line 460, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; }
+
+/* line 465, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.box {
+  background: #ccc;
+  width: 100%;
+  height: 100%;
+  float: left;
+  overflow: hidden;
+  position: relative; }
+
+/* line 473, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.box img {
+  height: 100%;
+  max-height: 460px;
+  width: 100%; }
+
+/* line 478, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.text-overlay {
+  height: 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: #fff;
+  padding: 0 1em;
+  transition: all 0.5s ease-out;
+  text-align: center; }
+
+/* line 489, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.box:hover > .text-overlay {
+  height: 100%;
+  background: #525b5c;
+  opacity: 0.8; }
+
+/* line 494, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.text-overlay h3 {
+  height: 0;
+  overflow: hidden;
+  margin-bottom: 0;
+  color: white;
+  border-bottom: solid 1px #ff850d;
+  font-weight: bold;
+  text-align: center;
+  padding-bottom: 5px; }
+
+/* line 504, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.text-overlay p {
+  height: 0;
+  overflow: hidden; }
+
+/* line 508, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.box:hover h3, .box:hover p {
+  height: auto; }
+
+/*-------------------------------*/
+/*           Animazioni CSS      */
+/*-------------------------------*/
+@keyframes expand {
+  0% {
+    height: 100%;
+    width: 100%; }
+  100% {
+    height: 120%;
+    width: 120%; } }
+
+/*-------------------------------*/
+/*           Footer              */
+/*-------------------------------*/
+/* line 527, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.page-footer {
+  background-color: #525b5c !important; }
+
+/* line 530, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.bottom-pipe {
+  border-right: solid 1px #ef5350; }
+
+/* line 533, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+.bottom-pipe-chisiamo {
+  border-left: solid 1px #ef5350; }
+
+/*-------------------------------*/
+/*           Media medium         */
+/*-------------------------------*/
+@media only screen and (max-width: 992px) {
+  /* line 540, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .galleria-home {
+    max-height: 290px; }
+  /* line 543, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .bottom-pipe {
+    border-bottom: solid 1px #ef5350;
+    border-right: none; }
+  /* line 547, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .bottom-pipe-chisiamo {
+    border-top: solid 1px #ef5350;
+    border-left: none; }
+  /* line 551, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .snippet-testo-left {
+    border-bottom: solid 1px #ef5350;
+    border-right: none;
+    text-align: center; }
+  /* line 556, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .wrap-persona {
+    background-color: #525b5c;
+    color: white;
+    padding-top: 15px; }
+  /* line 557, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .btn-home {
+    height: 45px;
+    margin-bottom: 15px; }
+  /* line 561, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .btn-persone {
+    height: 25px;
+    margin-bottom: 15px; }
+  /* line 565, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .carousel-intro {
+    font-size: 29px !important; }
+  /* line 568, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .carousel-body {
+    font-size: 21px !important; }
+  /* line 571, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .titolo-card {
+    font-size: 31px; }
+  /* line 575, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .dettagli-persona {
+    border-left: solid 1px #ef5350;
+    border-top: none;
+    text-align: center;
+    margin-top: 15px; }
+  /* line 581, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .dettagli-evento {
+    border-right: solid 1px #ef5350; }
+  /* line 584, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .blog-titolo {
+    font-size: 35px; }
+  /* line 587, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  #intro h3 {
+    font-size: 27px;
+    font-family: 'Raleway', sans-serif; }
+  /* line 591, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  #intro h2 {
+    font-size: 33px;
+    font-family: 'Raleway', sans-serif; }
+  /* line 595, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  #intro p {
+    font-size: 39px;
+    font-family: 'Raleway', sans-serif; } }
+
+/*-------------------------------*/
+/*           Media small         */
+/*-------------------------------*/
+@media only screen and (max-width: 600px) {
+  /* line 605, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .galleria-home {
+    max-height: 230px; }
+  /* line 608, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .btn-home {
+    height: 39px; }
+  /* line 611, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .btn-persone {
+    height: 25px;
+    margin-bottom: 20px;
+    text-align: center;
+    line-height: 17px; }
+  /* line 617, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .paginazione {
+    margin-bottom: 5px; }
+  /* line 618, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .snippet-testo-left {
+    text-align: center; }
+  /* line 621, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .carousel-intro {
+    font-size: 33px !important; }
+  /* line 624, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .carousel-body {
+    font-size: 27px !important; }
+  /* line 626, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .titolo-card {
+    font-size: 27px; }
+  /* line 628, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .inner-avatar {
+    margin-top: -15%;
+    margin-left: 11%;
+    z-index: 1; }
+  /* line 629, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .dettagli-evento {
+    border-bottom: solid 1px #ef5350;
+    border-right: none; }
+  /* line 633, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .dettagli-persona {
+    border-left: none;
+    border-top: solid 1px #ef5350;
+    text-align: center; }
+  /* line 638, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  .blog-titolo {
+    font-size: 29px; }
+  /* line 641, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  #intro h3 {
+    font-size: 23px;
+    font-family: 'Raleway', sans-serif; }
+  /* line 645, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  #intro h2 {
+    font-size: 27px;
+    font-family: 'Raleway', sans-serif; }
+  /* line 649, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  h5 {
+    font-size: 29px;
+    font-family: 'Raleway', sans-serif; }
+  /* line 653, /home/vagrant/wagtaildemo/demo/static/demo/css/main.scss */
+  #intro p {
+    font-size: 33px;
+    font-family: 'Raleway', sans-serif; } }

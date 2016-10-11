@@ -1,0 +1,26 @@
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{# Individual blog item in a list - used on blog index and home page #}
+    {% if blog.feed_image %}
+<div class="col s12 m6 l4 item grid-item" style="padding:2px;">
+  <div class="card">
+    <div class="card hoverable">
+      <div class="card-image">
+        {% image blog.feed_image original as img %}
+        <a href="{% pageurl blog %}"><img class="media-object" src="{{ img.url }}"/></a>
+        {% endif %}
+        <div class="card-content">
+          <h4 class="blue-grey-text text-blue-grey lighten-1">{{ blog.title }}</h4>
+          <p class="red-text text-red lighten-1"><i class="material-icons">date_range</i> {{ blog.date }}</p>
+          {% if blog.search_description %}
+          <p>{{ blog.search_description }}</p>
+          {% endif %}
+        </div>
+      </div>
+      <div class="card-action">
+        <a class="red-text text-red lighten-1" href="{% pageurl blog %}">Continua a Leggere</a>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+{% extends "demo/base.html" %}
+{% load wagtailcore_tags  %}
+{% load demo_tags %}
+
+{% block content %}
+{% include "demo/includes/parallasse_home.html" %}
+<div id="section1">
+    {% if page.intro %}
+    <h5>{{ page.intro|richtext }}</h5>
+    {% endif %}
+    <div class="container">
+        <div id="masonry-grid" class="row">
+            <div class="col s12 m12 l6 item">
+                <div class="card">
+                    <div class="card-image">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11602.578813555849!2d13.43654!3d43.363542!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb80f22de56e22b92!2sComune+di+Montecassiano!5e0!3m2!1sit!2sit!4v1473955780745"
+                                width="100%" height="350" frameborder="0" style="border:0" allowfullscreen></iframe>
+                    </div>
+                    <div class="card-content">
+
+                         <h4 class="card-title activator blue-grey-text text-blue-grey lighten-1">Contatti ed Orari<i class="material-icons right">touch_app</i></h4>
+                        <p class="red-text text-red lighten-1"><i class="material-icons">date_range</i><strong>test</strong></p>
+                    </div>
+                    <div class="card-action">
+                        <a class="red-text text-red lighten-1" href="https://www.google.it/maps/place/Comune+di+Montecassiano/@43.3638151,13.4360113,3a,75y,90t/data=!3m8!1e2!3m6!1s-WMAWlj1gVAA%2FV1k279JHdhI%2FAAAAAAAAAas%2FTzbyE6RWCO8fHGyrpfX_NYwmMT2Qok4JACLIB!2e4!3e12!6s%2F%2Flh3.googleusercontent.com%2F-WMAWlj1gVAA%2FV1k279JHdhI%2FAAAAAAAAAas%2FTzbyE6RWCO8fHGyrpfX_NYwmMT2Qok4JACLIB%2Fs114-k-no%2F!7i2592!8i1944!4m5!3m4!1s0x0:0xb80f22de56e22b92!8m2!3d43.363542!4d13.43654!6m1!1e1">Esplora</a>
+                    </div>
+    <div class="card-reveal">
+      <span class="card-title red-text text-red lighten-1">Contatti ed Orari<i class="material-icons right">close</i></span>
+                     <ul>
+                  <li><i class="material-icons icone-footer">home</i> All'Opera! Associazione Culturale</li>
+                  <li><i class="material-icons">drive_eta</i> Via ...Montecassiano(MC)</li>
+                  <li><i class="material-icons">perm_phone_msg</i> +39 0733 nnnnnn</li>
+                  <li><i class="material-icons">email</i> info@sinfo.nn</li>
+               </ul>
+    </div>
+                </div>
+            </div>
+            <div class="col s12 m12 l6 item">
+                <div class="card-panel">
+                    <span class="card-title blue-grey-text text-blue-grey center"><b>Per informazioni e richeiste utilizzare il seguente form.</b></span>
+                <form action="{% pageurl self %}" method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-flat waves-effect waves-red" style="border:solid 1px #ef5350;margin:5px;" type="submit" name="action">Invia
+                        <i class="material-icons right">send</i>
+                    </button>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

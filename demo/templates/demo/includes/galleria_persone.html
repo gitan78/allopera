@@ -1,0 +1,23 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+<div id="masonry-grid" class="row">
+	{% if page.galleria_persone.all %}
+	{% for item in page.galleria_persone.all %}
+	<div class="col s6 m4 l3 item galleria-home" style="padding:0;">
+		<div class="box">
+			{% image item.image original as immagine %}
+			<img src="{{ immagine.url }}" class="responsive-img"
+				 alt="{{ immagine.alt }}"/>
+			<div class="text-overlay">
+				<h4 class="white-text text-white" style="border-bottom:1px solid #ef5350;">{{ item.titolo }}</h4>
+				<p class="truncate center">{{ item.descrizione }}</p>
+				<a href="{{ item.link_external }}"
+				   class="waves-effect waves-red btn-flat btn-home white-text text-white btn-persone"><b>LEGGI</b></a>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	{% endif %}
+</div>
+

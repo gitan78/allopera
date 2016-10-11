@@ -1,0 +1,23 @@
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags wagtailembeds_tags %}
+
+<div class="carousel-fixed-item center">
+    <a class="btn waves-effect white grey-text darken-text-2 modal-trigger" href="#modal1">
+        <i class="material-icons">queue_music</i></a>
+</div>
+
+    {% if item.image %}
+    {% image item.image original as immagine %}
+    <a class="carousel-item" href="#one!"><img src="{{ immagine.url }}" width="100%" height="300px" alt="{{ immagine.alt }}"></a>
+    {% else %}
+        <div class="carousel-item {{ item.stile_slide }}" href="#one!">
+            <div class="row">
+            <div class="container center">
+            <p>{{ item.titolo|richtext }}</p>
+             {{ item.descrizione|richtext }}
+    </div>
+            </div>
+            </div>
+    {% endif %}
+
+

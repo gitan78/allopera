@@ -1,0 +1,25 @@
+{% extends "demo/base.html" %}
+{% load wagtailcore_tags static %}
+{% load wagtailimages_tags %}
+{% block body_class %}template-homepage{% endblock %}
+
+{% block content %}
+
+{% include "blog/includes/parallasse_immagine.html" %}
+
+
+<div id="section1">
+    <div class="row">
+        {% include "blog/includes/galleria_immagini_home.html" %}
+
+        {% if self.campi_dinamici %}
+            <div class="container ">
+                <div class="container body-content">
+            {% include "blog/includes/streamfield.html" with content=self.campi_dinamici %}
+            </div>
+        </div>
+    {% endif %}
+
+</div></div>
+
+{% endblock %}
